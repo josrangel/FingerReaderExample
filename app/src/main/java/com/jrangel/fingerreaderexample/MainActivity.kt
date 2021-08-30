@@ -3,6 +3,7 @@ package com.jrangel.fingerreaderexample
 import android.Manifest
 import android.annotation.TargetApi
 import android.app.KeyguardManager
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.fingerprint.FingerprintManager
 import android.os.Build
@@ -169,10 +170,22 @@ class MainActivity : AppCompatActivity(), OnUpdateListener {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        reloadActivity()
+    }
+
+    private fun reloadActivity() {
+        finish()
+        startActivity(getIntent())
+    }
+
     override fun update(msg: String, success: Boolean) {
         tvErrorText.text = msg
         if (success) {
             tvErrorText.setTextColor(ContextCompat.getColor(this, R.color.successText))
+            var intent = Intent(this, SuccessActivity::class.java)
+            startActivityForResult(intent, 1)
         }
     }
 }
